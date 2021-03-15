@@ -1,0 +1,37 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  checks:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: "Read NodeJS Version"
+        id: read-nodejs-version
+        uses: pCYSl5EDgo/cat@264f5b318158276af69bd0a2a9f1e613b2d03ebf
+        with:
+          path: ./.node-version
+          trim: true
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ steps.read-nodejs-version.outputs.text }}
+      - name: "Cache Dependencies"
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm/
+          key: npm-cache-${{ runner.os }}-${{ hashFiles('./package-lock.json') }}-${{ steps.read-nodejs-version.outputs.text }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Lint
+        run: npm run lint

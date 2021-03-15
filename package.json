@@ -1,0 +1,29 @@
+{
+	"name": "pagerduty-on-call-issue-action",
+	"version": "0.0.0",
+	"description": "Create an issue automatically whenever a new person goes on-call in PagerDuty.",
+	"main": "./build/index.js",
+	"scripts": {
+		"build": "tsc",
+		"lint": "eslint ./src/"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"@actions/core": "^1.2.4",
+		"@octokit/action": "^3.5.5",
+		"@octokit/rest": "^17.8.0",
+		"front-matter": "^4.0.2",
+		"moment": "^2.29.1",
+		"mustache": "^4.1.0",
+		"node-ical": "^0.12.9"
+	},
+	"devDependencies": {
+		"@tsconfig/node12": "^1.0.7",
+		"@types/mustache": "^4.1.1",
+		"@types/request": "^2.48.5",
+		"@typescript-eslint/eslint-plugin": "^4.18.0",
+		"@typescript-eslint/parser": "^4.18.0",
+		"eslint": "^7.22.0",
+		"typescript": "^3.9.9"
+	}
+}

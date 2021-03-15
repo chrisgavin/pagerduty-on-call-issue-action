@@ -1,0 +1,29 @@
+name: PagerDuty On-Call Issue Action
+description: Create an issue automatically whenever a new person goes on-call in PagerDuty.
+runs:
+  using: node12
+  main: ./build/index.js
+inputs:
+  github_token:
+    description: "A GitHub access token used for creating the issue."
+    required: true
+    default: ${{ github.token }}
+  github_repository:
+    description: The name of the repository to create the issue on.
+    required: true
+    default: ${{ github.repository }}
+  pagerduty_icalendar_url:
+    description: The URL of the schedule calendar.
+    required: true
+  issue_template:
+    description: "The path to the issue template to use for the issue."
+    default: "./.github/ISSUE_TEMPLATE/on-call.md"
+    required: true
+  minimum_shift_length:
+    description: How long should a shift need to be before creating an issue (you may not want to create an issue if someone is covering a shift for a few hours), expressed as an ISO 8601 duration. e.g. PT24H would be 24 hours.
+    default: PT0H
+    required: true
+  create_issue_in_advance:
+    description: How soon before a shift should an issue be created, expressed as an ISO 8601 duration. e.g. PT24H would be 24 hours.
+    default: "PT24H"
+    required: true
