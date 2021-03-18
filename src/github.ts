@@ -1,7 +1,7 @@
-import * as core from "@actions/core";
 import * as fs from "fs";
 import * as mustache from "mustache";
 import * as octokit from "@octokit/action";
+import * as inputs from "./inputs";
 import * as pagerduty from "./pagerduty";
 import fm from "front-matter";
 
@@ -20,7 +20,7 @@ class IssueData {
 }
 
 function getRepository() {
-	const repository = core.getInput("github_repository", {required: true}).split("/");
+	const repository = inputs.githubRepository().split("/");
 	return {repositoryOwner: repository[0], repositoryName: repository[1]};
 }
 
@@ -35,7 +35,7 @@ interface TemplateAttributes {
 }
 
 async function renderIssueTemplate(shift:pagerduty.OnCallShift) {
-	const path = core.getInput("issue_template", {required: true});
+	const path = inputs.issueTemplate();
 	const template = await fs.promises.readFile(path);
 	const {attributes, body} = fm<TemplateAttributes>(template.toString());
 	const templateVariables = {

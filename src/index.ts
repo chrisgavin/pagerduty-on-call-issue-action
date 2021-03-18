@@ -1,11 +1,12 @@
 import * as core from "@actions/core";
 import * as github from "./github";
+import * as inputs from "./inputs";
 import * as pagerduty from "./pagerduty";
 import {default as moment} from "moment";
 
 async function main() {
-	const createIssueInAdvance = moment.duration(core.getInput("create_issue_in_advance", {required: true}));
-	const createOnBusinessDay = core.getInput("create_on_business_day", {required: true}).toLowerCase() === "true";
+	const createIssueInAdvance = inputs.createIssueInAdvance();
+	const createOnBusinessDay = inputs.createOnBusinessDay();
 	const pagerdutyShifts = await pagerduty.getOnCallShifts();
 	const existingIssues = await github.getExistingIssues();
 	for (const shift of pagerdutyShifts) {
