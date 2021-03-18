@@ -5,6 +5,7 @@ import {default as moment} from "moment";
 
 async function main() {
 	const createIssueInAdvance = moment.duration(core.getInput("create_issue_in_advance", {required: true}));
+	const createOnBusinessDay = core.getInput("create_on_business_day", {required: true}).toLowerCase() === "true";
 	const pagerdutyShifts = await pagerduty.getOnCallShifts();
 	const existingIssues = await github.getExistingIssues();
 	for (const shift of pagerdutyShifts) {
@@ -13,8 +14,12 @@ async function main() {
 			console.log("Not making an issue. Shift is already over.");
 			continue;
 		}
-		if (shift.start > moment().add(createIssueInAdvance)) {
-			console.log(`Not making an issue. Shift starts in more than ${createIssueInAdvance.toISOString()}.`);
+		let shouldCreateIssueAfter = shift.start.subtract(createIssueInAdvance);
+		while (createOnBusinessDay && shouldCreateIssueAfter.isoWeekday() >= 6) {
+			shouldCreateIssueAfter = shouldCreateIssueAfter.subtract(moment.duration(1, "days"));
+		}
+		if (moment() < shouldCreateIssueAfter) {
+			console.log(`Not making an issue. The issue for this shift should be created after ${shouldCreateIssueAfter.toISOString()}.`);
 			continue;
 		}
 		const matchingExistingIssues = existingIssues.filter(issue => issue.body?.includes(shift.annotation()));

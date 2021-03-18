@@ -27,3 +27,7 @@ inputs:
     description: How soon before a shift should an issue be created, expressed as an ISO 8601 duration. e.g. PT24H would be 24 hours.
     default: "PT24H"
     required: true
+  create_on_business_day:
+    description: Create issues on business days (e.g. if an issue would be created on a Saturday, create it on Friday instead). 
+    default: "false"
+    required: true
