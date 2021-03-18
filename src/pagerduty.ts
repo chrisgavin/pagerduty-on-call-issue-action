@@ -1,6 +1,9 @@
 import * as core from "@actions/core";
 import * as ical from "node-ical";
+import * as inputs from "./inputs";
 import {default as moment} from "moment";
+
+const FILE_URL_PREFIX = "file://";
 
 export class OnCallShift {
 	id: string;
@@ -29,8 +32,11 @@ export class OnCallShift {
 }
 
 async function getRawCalendarData() {
-	const pagerdutyiCalendarURL = core.getInput("pagerduty_icalendar_url", {required: true});
-	return await ical.fromURL(pagerdutyiCalendarURL);
+	const pagerDutyICalendarURL = inputs.pagerDutyICalendarURL();
+	if (pagerDutyICalendarURL.startsWith(FILE_URL_PREFIX)) {
+		return ical.parseFile(pagerDutyICalendarURL.replace(FILE_URL_PREFIX, ""));
+	}
+	return await ical.fromURL(inputs.pagerDutyICalendarURL());
 }
 
 async function getRawOnCallShifts() {
@@ -41,7 +47,7 @@ async function getRawOnCallShifts() {
 }
 
 export async function getOnCallShifts() {
-	const minimumShiftLength = moment.duration(core.getInput("minimum_shift_length", {required: true}));
+	const minimumShiftLength = inputs.minimumShiftLength();
 	let shifts = await getRawOnCallShifts();
 	// Filter out any shifts shorter than the minimum shift length.
 	shifts = shifts.filter(shift => shift.duration() > minimumShiftLength);
