@@ -2,7 +2,7 @@ name: PagerDuty On-Call Issue Action
 description: Create an issue automatically whenever a new person goes on-call in PagerDuty.
 runs:
   using: node12
-  main: ./build/src/index.js
+  main: ./build/index.js
 inputs:
   github_token:
     description: "A GitHub access token used for creating the issue."
