@@ -15,7 +15,8 @@ async function main() {
 			console.log("Not making an issue. Shift is already over.");
 			continue;
 		}
-		let shouldCreateIssueAfter = shift.start.subtract(createIssueInAdvance);
+		let shouldCreateIssueAfter = shift.start.clone();
+		shouldCreateIssueAfter = shouldCreateIssueAfter.subtract(createIssueInAdvance);
 		while (createOnBusinessDay && shouldCreateIssueAfter.isoWeekday() >= 6) {
 			shouldCreateIssueAfter = shouldCreateIssueAfter.subtract(moment.duration(1, "days"));
 		}
