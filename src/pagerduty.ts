@@ -27,7 +27,16 @@ export class OnCallShift {
 	}
 
 	annotation() {
-		return `<!-- pagerduty-on-call-issue-action: ${this.id} -->`;
+		return `<!-- pagerduty-on-call-issue-action: ${this.email}-${this.start.format("YYYY-MM-DD")} -->`;
+	}
+
+	alternativeAnnotations() {
+		return [
+			this.annotation(),
+			`<!-- pagerduty-on-call-issue-action: ${this.email}-${this.start.clone().subtract(1, "day").format("YYYY-MM-DD")} -->`,
+			`<!-- pagerduty-on-call-issue-action: ${this.email}-${this.start.clone().add(1, "day").format("YYYY-MM-DD")} -->`,
+			`<!-- pagerduty-on-call-issue-action: ${this.id} -->`,
+		];
 	}
 }
 

@@ -39,6 +39,22 @@ describe("test getOnCallShifts()", () => {
 		expect(shifts[0].start.toISOString()).toEqual("2021-02-16T16:00:00.000Z");
 		expect(shifts[0].end.toISOString()).toEqual("2021-02-22T16:00:00.000Z");
 	});
+
+	it("should return sensible annotations for shifts and allow them to move by up to a day", async () => {
+		sinon.stub(inputs, "minimumShiftLength").returns(moment.duration(24, "hours"));
+		sinon.stub(inputs, "pagerDutyICalendarURL").returns("file://./tests/fixtures/schedule-with-cover.ics");
+		const shifts = await pagerduty.getOnCallShifts();
+
+		expect(shifts.length).toBe(1);
+
+		expect(shifts[0].annotation()).toBe("<!-- pagerduty-on-call-issue-action: user1@example.com-2021-02-16 -->");
+		expect(shifts[0].alternativeAnnotations()).toEqual([
+			"<!-- pagerduty-on-call-issue-action: user1@example.com-2021-02-16 -->",
+			"<!-- pagerduty-on-call-issue-action: user1@example.com-2021-02-15 -->",
+			"<!-- pagerduty-on-call-issue-action: user1@example.com-2021-02-17 -->",
+			"<!-- pagerduty-on-call-issue-action: Q0DR9KA5FQMJ34 -->",
+		]);
+	});
 });
 
 afterEach(function () {

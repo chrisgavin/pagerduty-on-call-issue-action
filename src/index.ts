@@ -24,7 +24,7 @@ async function main() {
 			console.log(`Not making an issue. The issue for this shift should be created after ${shouldCreateIssueAfter.toISOString()}.`);
 			continue;
 		}
-		const matchingExistingIssues = existingIssues.filter(issue => issue.body?.includes(shift.annotation()));
+		const matchingExistingIssues = existingIssues.filter(issue => shift.alternativeAnnotations().some(annotation => issue.body?.includes(annotation)));
 		if (matchingExistingIssues.length > 0) {
 			console.log(`Not making an issue. One already exists with number #${matchingExistingIssues[0].number}.`);
 			continue;
