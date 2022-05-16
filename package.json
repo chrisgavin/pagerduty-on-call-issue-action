@@ -5,7 +5,8 @@
 	"scripts": {
 		"build": "tsc",
 		"lint": "eslint ./src/",
-		"test": "jest"
+		"test": "jest",
+		"bootstrap": "npm install && npm run build && npm prune --production"
 	},
 	"license": "MIT",
 	"dependencies": {
