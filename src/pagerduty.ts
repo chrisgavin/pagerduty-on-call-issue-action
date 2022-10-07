@@ -59,11 +59,27 @@ export async function getOnCallShifts() {
 	const minimumShiftLength = inputs.minimumShiftLength();
 	let shifts = await getRawOnCallShifts();
 	// Filter out any shifts shorter than the minimum shift length.
-	shifts = shifts.filter(shift => shift.duration() > minimumShiftLength);
+	const filteredShifts: OnCallShift[] = [];
+	shifts.forEach((shift, index) => {
+		if (shift.duration() > minimumShiftLength) {
+			filteredShifts.push(shift);
+		}
+		else {
+			// If the shift is shorter than the minimum shift length, we may still want to include it so long as the next shift that is longer than the minimum shift length is assigned to the same person.
+			for (const nextShift of shifts.slice(index + 1)) {
+				if (nextShift.duration() > minimumShiftLength) {
+					if (shift.email === nextShift.email) {
+						filteredShifts.push(shift);
+					}
+					break;
+				}
+			}
+		}
+	});
 	// Combine any now adjacent shifts by the same person.
 	const combinedShifts = [];
 	let previousShift = undefined;
-	for (const shift of shifts) {
+	for (const shift of filteredShifts) {
 		if (previousShift !== undefined && shift.email === previousShift.email) {
 			previousShift.end = shift.end;
 		}
