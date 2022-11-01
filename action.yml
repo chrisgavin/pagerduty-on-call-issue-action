@@ -1,7 +1,7 @@
 name: PagerDuty On-Call Issue Action
 description: Create an issue automatically whenever a new person goes on-call in PagerDuty.
 runs:
-  using: node12
+  using: node16
   main: ./bootstrap-shim.js
 inputs:
   github_token:
