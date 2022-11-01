@@ -13,24 +13,23 @@
 		"@actions/core": "^1.2.4",
 		"@octokit/action": "^3.5.5",
 		"@octokit/rest": "^17.8.0",
+		"@tsconfig/node16": "^1.0.3",
 		"front-matter": "^4.0.2",
 		"moment": "^2.29.1",
 		"mustache": "^4.1.0",
 		"node-ical": "^0.12.9"
 	},
 	"devDependencies": {
-		"@tsconfig/node12": "^1.0.7",
 		"@types/jest": "^26.0.21",
 		"@types/mustache": "^4.1.1",
 		"@types/request": "^2.48.5",
 		"@types/sinon": "^9.0.11",
-		"@typescript-eslint/eslint-plugin": "^4.18.0",
-		"@typescript-eslint/parser": "^4.18.0",
-		"eslint": "^7.22.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"eslint": "^8.24.0",
 		"jest": "^26.6.3",
 		"sinon": "^9.2.4",
 		"ts-jest": "^26.5.4",
-		"ts-node": "^9.1.1",
-		"typescript": "^3.9.9"
+		"ts-node": "^10.9.1",
+		"typescript": "^4.8.4"
 	}
 }
